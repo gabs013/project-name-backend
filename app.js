@@ -1,7 +1,10 @@
 const express = require('express');
+const mongoose = require('mongoose');
 
 const app = express();
 const { PORT = 3000 } = process.env;
+
+const DATABASE_URL = 'mongodb://127.0.0.1:27017/asteriondb';
 
 app.use(express.json());
 
@@ -12,6 +15,15 @@ app.get('/', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  process.stdout.write(`Servidor iniciado en el puerto ${PORT}\n`);
-});
+mongoose.connect(DATABASE_URL)
+  .then(() => {
+    process.stdout.write('Conexión con MongoDB establecida\n');
+
+    app.listen(PORT, () => {
+      process.stdout.write(`Servidor iniciado en el puerto ${PORT}\n`);
+    });
+  })
+  .catch((error) => {
+    process.stderr.write(`Error al conectar con MongoDB: ${error.message}\n`);
+    process.exitCode = 1;
+  });
