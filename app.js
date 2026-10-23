@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const routes = require('./routes');
+const errorHandler = require('./middlewares/error');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -14,6 +16,16 @@ app.get('/', (req, res) => {
     message: 'API de La biblioteca de Asterión',
   });
 });
+
+app.use(routes);
+
+app.use((req, res) => {
+  res.status(404).send({
+    message: 'La ruta solicitada no existe',
+  });
+});
+
+app.use(errorHandler);
 
 mongoose.connect(DATABASE_URL)
   .then(() => {
