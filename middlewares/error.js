@@ -7,7 +7,7 @@ const errorHandler = (err, req, res, next) => {
 
   if (isCelebrateError(err)) {
     return res.status(400).send({
-      message: 'Revisa los datos enviados para el registro',
+      message:'Revisa los datos enviados',
     });
   }
 
@@ -26,6 +26,12 @@ const errorHandler = (err, req, res, next) => {
       message: 'Los datos enviados no son válidos',
     });
   }
+
+  if (err.statusCode === 401) {
+  return res.status(401).send({
+    message: err.message,
+  });
+}
 
   return res.status(500).send({
     message: 'Ha ocurrido un error interno del servidor',

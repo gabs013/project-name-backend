@@ -1,5 +1,8 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
+const { jwtSecret } = require('../utils/config');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const createUser = (req, res, next) => {
   const { name, email, password } = req.body;
@@ -18,4 +21,31 @@ const createUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { createUser };
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  return User.findOne({ email })
+    .select('+password')
+    .then((user) => {
+      if (!user) {
+        throw new UnauthorizedError('Correo o contraseña incorrectos');
+      }
+
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            throw new UnauthorizedError('Correo o contraseña incorrectos');
+          }
+
+          return jwt.sign(
+            { _id: user._id.toString() },
+            jwtSecret,
+            { expiresIn: '7d', algorithm: 'HS256' },
+          );
+        });
+    })
+    .then((token) => res.status(200).send({ token }))
+    .catch(next);
+};
+
+module.exports = { createUser, login };

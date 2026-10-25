@@ -32,4 +32,30 @@ const validateRegistration = celebrate({
   }).required(),
 });
 
-module.exports = { validateRegistration };
+const validateLogin = celebrate({
+  [Segments.BODY]: Joi.object({
+    email: Joi.string()
+      .trim()
+      .lowercase()
+      .custom((value, helpers) => {
+        if (!validator.isEmail(value)) {
+          return helpers.error('any.invalid');
+        }
+
+        return value;
+      })
+      .required(),
+    password: Joi.string()
+      .min(8)
+      .custom((value, helpers) => {
+        if (Buffer.byteLength(value, 'utf8') > 72) {
+          return helpers.error('any.invalid');
+        }
+
+        return value;
+      })
+      .required(),
+  }).required(),
+});
+
+module.exports = { validateRegistration, validateLogin };
