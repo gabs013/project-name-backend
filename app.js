@@ -10,13 +10,6 @@ const DATABASE_URL = 'mongodb://127.0.0.1:27017/asteriondb';
 
 app.use(express.json());
 
-// Ruta temporal para comprobar que el servidor responde.
-app.get('/', (req, res) => {
-  res.status(200).send({
-    message: 'API de La biblioteca de Asterión',
-  });
-});
-
 app.use(routes);
 
 app.use((req, res) => {
