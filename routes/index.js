@@ -4,8 +4,14 @@ const {
   validateRegistration,
   validateLogin,
 } = require('../middlewares/validation');
+const auth = require('../middlewares/auth');
+const usersRouter = require('./users');
 
 router.post('/signup', validateRegistration, createUser);
 router.post('/signin', validateLogin, login);
+
+router.use(auth);
+
+router.use('/users', usersRouter);
 
 module.exports = router;

@@ -48,4 +48,18 @@ const login = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { createUser, login };
+const getCurrentUser = (req, res, next) => User.findById(req.user._id)
+  .then((user) => {
+    if (!user) {
+      throw new UnauthorizedError('El usuario de esta sesión ya no existe');
+    }
+
+    return res.status(200).send({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  })
+  .catch(next);
+
+module.exports = { createUser, login, getCurrentUser };
