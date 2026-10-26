@@ -28,9 +28,9 @@ const errorHandler = (err, req, res, next) => {
   }
 
   if (err.statusCode === 401) {
-  return res.status(401).send({
-    message: err.message,
-  });
+    return res.status(401).send({
+      message: err.message,
+    });
   }
 
   return res.status(500).send({
