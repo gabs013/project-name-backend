@@ -7,7 +7,7 @@ const errorHandler = (err, req, res, next) => {
 
   if (isCelebrateError(err)) {
     return res.status(400).send({
-      message:'Revisa los datos enviados',
+      message: 'Revisa los datos enviados',
     });
   }
 
@@ -31,7 +31,7 @@ const errorHandler = (err, req, res, next) => {
   return res.status(401).send({
     message: err.message,
   });
-}
+  }
 
   return res.status(500).send({
     message: 'Ha ocurrido un error interno del servidor',
