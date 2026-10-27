@@ -85,4 +85,12 @@ const validateBook = celebrate({
   }).required(),
 });
 
-module.exports = { validateRegistration, validateLogin, validateBook };
+const validateBookId = celebrate({
+  [Segments.PARAMS]: Joi.object({
+    bookId: Joi.string()
+      .pattern(/^[a-fA-F0-9]{24}$/)
+      .required(),
+  }).required(),
+});
+
+module.exports = { validateRegistration, validateLogin, validateBook, validateBookId };

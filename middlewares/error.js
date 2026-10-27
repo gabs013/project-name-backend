@@ -27,8 +27,8 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  if (err.statusCode === 401) {
-    return res.status(401).send({
+  if ([401, 403, 404].includes(err.statusCode)) {
+    return res.status(err.statusCode).send({
       message: err.message,
     });
   }
