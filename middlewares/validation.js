@@ -93,4 +93,6 @@ const validateBookId = celebrate({
   }).required(),
 });
 
-module.exports = { validateRegistration, validateLogin, validateBook, validateBookId };
+module.exports = {
+  validateRegistration, validateLogin, validateBook, validateBookId,
+};

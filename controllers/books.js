@@ -44,34 +44,34 @@ const createBook = (req, res, next) => {
 
 const deleteBook = (req, res, next) => Book.findById(req.params.bookId)
   .select('+owner')
-    .then((book) => {
-      if (!book) {
-        throw new NotFoundError('No se encontró el libro');
-      }
+  .then((book) => {
+    if (!book) {
+      throw new NotFoundError('No se encontró el libro');
+    }
 
-      if (book.owner.toString() !== req.user._id) {
-        throw new ForbiddenError(
-          'No puedes eliminar un libro guardado por otro usuario',
-        );
-      }
+    if (book.owner.toString() !== req.user._id) {
+      throw new ForbiddenError(
+        'No puedes eliminar un libro guardado por otro usuario',
+      );
+    }
 
-      return Book.deleteOne({
-        _id: book._id,
-        owner: req.user._id,
-      });
-    })
+    return Book.deleteOne({
+      _id: book._id,
+      owner: req.user._id,
+    });
+  })
 
-    .then((result) => {
-      if (result.deletedCount === 0) {
-        throw new NotFoundError('No se encontró el libro');
-      }
+  .then((result) => {
+    if (result.deletedCount === 0) {
+      throw new NotFoundError('No se encontró el libro');
+    }
 
-      return res.status(200).send({
-        message: 'Libro eliminado correctamente',
-      });
-    })
+    return res.status(200).send({
+      message: 'Libro eliminado correctamente',
+    });
+  })
 
-    .catch(next);
+  .catch(next);
 
 module.exports = {
   getBooks,
