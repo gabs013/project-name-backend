@@ -1,6 +1,7 @@
 const { celebrate, Joi, Segments } = require('celebrate');
 const validator = require('validator');
 
+// Para validar el registro del usuario
 const validateRegistration = celebrate({
   [Segments.BODY]: Joi.object({
     name: Joi.string()
@@ -32,6 +33,7 @@ const validateRegistration = celebrate({
   }).required(),
 });
 
+// Para validar el inicio de sesión del usuario
 const validateLogin = celebrate({
   [Segments.BODY]: Joi.object({
     email: Joi.string()
@@ -58,4 +60,29 @@ const validateLogin = celebrate({
   }).required(),
 });
 
-module.exports = { validateRegistration, validateLogin };
+// Para validar los libros
+const validateBook = celebrate({
+  [Segments.BODY]: Joi.object({
+    openLibraryId: Joi.string()
+      .pattern(/^\/works\/OL\d+W$/)
+      .required(),
+    title: Joi.string().trim().min(1).required(),
+    authors: Joi.array().items(Joi.string().trim().min(1)),
+    firstPublishYear: Joi.number().integer().allow(null),
+    coverUrl: Joi.string()
+      .allow('')
+      .custom((value, helpers) => {
+        if (!validator.isURL(value, {
+          protocols: ['http', 'https'],
+          require_protocol: true,
+        })) {
+          return helpers.error('any.invalid');
+        }
+
+        return value;
+      }),
+    keyword: Joi.string().trim().min(1).required(),
+  }).required(),
+});
+
+module.exports = { validateRegistration, validateLogin, validateBook };
