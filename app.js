@@ -4,11 +4,9 @@ const routes = require('./routes');
 const errorHandler = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./errors/NotFoundError');
+const { PORT, DATABASE_URL } = require('./utils/config');
 
 const app = express();
-const { PORT = 3000 } = process.env;
-
-const DATABASE_URL = 'mongodb://127.0.0.1:27017/asteriondb';
 
 app.use(requestLogger);
 
