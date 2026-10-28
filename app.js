@@ -6,6 +6,7 @@ const routes = require('./routes');
 const errorHandler = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./errors/NotFoundError');
+const apiLimiter = require('./middlewares/rateLimiter');
 const {
   PORT,
   DATABASE_URL,
@@ -23,6 +24,8 @@ app.use(cors({
   methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+app.use(apiLimiter);
 
 app.use(express.json());
 
