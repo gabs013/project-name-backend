@@ -1,14 +1,28 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const cors = require('cors');
 const routes = require('./routes');
 const errorHandler = require('./middlewares/error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./errors/NotFoundError');
-const { PORT, DATABASE_URL } = require('./utils/config');
+const {
+  PORT,
+  DATABASE_URL,
+  allowedOrigins,
+} = require('./utils/config');
 
 const app = express();
 
 app.use(requestLogger);
+
+app.use(helmet());
+
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use(express.json());
 
