@@ -15,6 +15,8 @@ const {
 
 const app = express();
 
+app.set('trust proxy', 'loopback');
+
 app.use(requestLogger);
 
 app.use(helmet());
@@ -43,7 +45,7 @@ mongoose.connect(DATABASE_URL)
   .then(() => {
     process.stdout.write('Conexión con MongoDB establecida\n');
 
-    app.listen(PORT, () => {
+    app.listen(PORT, '127.0.0.1', () => {
       process.stdout.write(`Servidor iniciado en el puerto ${PORT}\n`);
     });
   })
