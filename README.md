@@ -111,10 +111,10 @@ cuando se ejecuta en producción.
 
 ## Estado del despliegue
 
-Pendiente de despliegue en un servidor independiente para Asterión.
+URL base: https://asterion-api.duckdns.org
 
-La URL pública HTTPS se añadirá después de configurar el dominio,
-el certificado y verificar el funcionamiento de la API.
+El backend está alojado en Google Cloud y utiliza PM2, Nginx
+y HTTPS con un certificado de Let's Encrypt.
 
 ## Entrega
 
